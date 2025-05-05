@@ -2,6 +2,14 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+const isProd = process.env.NODE_ENV === "production";
+
+// Enforce secret in production
+const secret = process.env.NEXTAUTH_SECRET;
+if (isProd && !secret) {
+  throw new Error("Missing NEXTAUTH_SECRET in production.");
+}
+
 const handler = NextAuth({
   providers: [
     CredentialsProvider({
@@ -17,13 +25,12 @@ const handler = NextAuth({
           image:
             "https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png",
         };
-
         return user;
       },
     }),
   ],
   pages: {
-    signIn: "/", // Keep the sign-in on homepage
+    signIn: "/", // Login page remains at home
   },
   callbacks: {
     async redirect() {
@@ -39,6 +46,7 @@ const handler = NextAuth({
   session: {
     strategy: "jwt",
   },
+  secret: secret || "dev-secret-key", // fallback secret for local
 });
 
 export { handler as GET, handler as POST };
