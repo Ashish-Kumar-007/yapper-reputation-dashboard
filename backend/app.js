@@ -1,19 +1,29 @@
-// app.js
-const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const cors = require('cors');
-const yapperRoutes = require('./routes/yapperRoutes');
-
+const mongoose = require("mongoose");
+const Yapper = require("./models/Yapper");
+const dotenv = require("dotenv");
 dotenv.config();
-const app = express();
-app.use(cors());
-app.use(express.json());
 
-app.use('/api', yapperRoutes);
+const mockYapperData = require("./mockData").mockYapperData;
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log('DB Error:', err));
+mongoose.connect(process.env.MONGO_URI).then(async () => {
+  console.log("Database connected!");
 
-module.exports = app;
+  try {
+    // Optionally clear existing data
+    // await Yapper.deleteMany({});
+
+    // Insert mock data
+    for (const data of mockYapperData) {
+      await Yapper.create(data);
+      console.log("Inserted mock Yapper:", data);
+    }
+
+    console.log("All mock data inserted!");
+  } catch (err) {
+    console.error("Error inserting data:", err);
+  } finally {
+    mongoose.disconnect();
+  }
+}).catch((err) => {
+  console.error("MongoDB connection error:", err);
+});

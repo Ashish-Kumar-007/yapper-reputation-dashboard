@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { submitYap, getYapper } = require('../controllers/yapperController');
+const { getLeaderboard, getYapperProfile } = require('../controllers/yapperController');
 
-router.post('/yap', submitYap);
-router.get('/yapper/:id', getYapper);
+router.get('/leaderboard', getLeaderboard);
+router.get('/:id', getYapperProfile);
 
 module.exports = router;
