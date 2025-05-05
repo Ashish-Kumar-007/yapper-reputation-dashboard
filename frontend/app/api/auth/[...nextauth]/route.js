@@ -2,13 +2,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-const isProd = process.env.NODE_ENV === "production";
-
-// Enforce secret in production
-const secret = process.env.NEXTAUTH_SECRET;
-if (isProd && !secret) {
-  throw new Error("Missing NEXTAUTH_SECRET in production.");
-}
 
 const handler = NextAuth({
   providers: [
@@ -46,7 +39,7 @@ const handler = NextAuth({
   session: {
     strategy: "jwt",
   },
-  secret: secret || "dev-secret-key", // fallback secret for local
+  secret: process.env.NEXTAUTH_SECRET || "dev-secret-key", // fallback secret for local
 });
 
 export { handler as GET, handler as POST };
