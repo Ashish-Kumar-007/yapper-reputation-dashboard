@@ -5,8 +5,8 @@ A full-stack project to track and visualize the reputation, performance, and beh
 
 ## 🚀 Live Demo
 
- [Deployed Frontend URL](https://yapper-reputation.vercel.app/)
-[Backend API](https://yhttps://yapper-reputation-dashboard.onrender.com)
+- [Deployed Frontend URL](https://yapper-reputation.vercel.app/)
+- [Backend API](https://yhttps://yapper-reputation-dashboard.onrender.com)
 
 ---
 
