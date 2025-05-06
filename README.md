@@ -44,29 +44,6 @@ Reputation Score = (Success Rate % × 0.6) + (Active Streak Days × 0.4)
 
 ---
 
-## 🗂️ Project Structure
-
-```bash
-yapper-reputation-dashboard/
-│
-├── backend/
-│   ├── models/           # Mongoose schema for Yapper
-│   ├── routes/           # Express routes (yap submission, fetch stats)
-│   ├── controllers/      # Logic for updating reputation
-│   └── server.js         # Express app entry point
-│
-├── frontend/
-│   ├── pages/
-│   │   ├── index.tsx     # Dashboard home
-│   │   └── dashboard/[id].tsx # Yapper profile page
-│   ├── components/       # Reusable UI components
-│   └── styles/           # Tailwind configs
-│
-└── README.md
-```
-
----
-
 ## 📦 Installation
 
 ### 🔧 Backend
@@ -98,8 +75,8 @@ npm run dev
 
 ## 🧪 Sample API Endpoints
 
-* `POST /api/yap` – Submit a yap
-* `GET /api/yapper/:id` – Get reputation + stats
+* `GET /api/yapper/leaderboard` – Get top 5 Yappers based on reputation score
+* `GET /api/yapper/:id` – Fetch full profile for a Yapper
 
 ---
 
