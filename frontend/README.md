@@ -1,66 +1,30 @@
-Here’s a clean and well-structured **README.md** file for your Yapper frontend built using **Next.js (App Router)**:
+
+# 🖥️ Yapper Reputation Frontend
+
+This is the frontend application for the **Yapper Reputation Dashboard**, built using **Next.js (App Router)** and styled with **Tailwind CSS**. It visually displays the reputation metrics of content creators (Yappers) based on their success rate, active streak, and overall performance.
 
 ---
 
-```markdown
-# 🐦 Yapper Frontend
+## ✨ Features
 
-A minimalist dashboard for content creators ("Yappers") to track their Twitter content submissions ("Yaps"). This dashboard provides real-time statistics, reputation scoring, badge tracking, and leaderboard insights.
+- 📊 Dynamic dashboard with:
+  - Reputation Score (visualized with semi-circle progress bar)
+  - Submission stats (total, successful, rejected yaps)
+  - 🔥 Active streak indicator
+  - 🏅 Earned badges display
+  - 📈 Line chart showing reputation growth over time
+- 🏆 Leaderboard of top Yappers
+- 🐦 Twitter mock authentication using **NextAuth.js**
+- 🔐 Protected dashboard route
+- 🎨 Clean, minimal UI design
 
-## 🚀 Features
+---
 
-- 🔐 Twitter authentication via NextAuth.js
-- 📊 Reputation score with semi-circle progress visualization
-- 📈 Reputation growth chart using Recharts
-- 📝 Submission statistics (Yaps, Rejections, Streaks)
-- 🏆 Badge collection display
-- 🥇 Leaderboard comparison with other yappers
-- ⚡ Fully responsive and clean UI using Tailwind CSS
+## 🚀 Getting Started
 
-## 🧾 Tech Stack
-
-- **Framework:** Next.js (App Router)
-- **Auth:** NextAuth.js (Twitter OAuth)
-- **UI:** Tailwind CSS
-- **Charts:** Recharts
-- **State:** React Hooks
-- **Mock Data:** Local mockData.ts file for development
-
-## 📁 Folder Structure
-
-```
-
-yapper-frontend/
-│
-├── app/                       # App Router pages
-│   ├── dashboard/             # Authenticated dashboard
-│   └── page.tsx              # Landing / login page
-│
-├── components/                # Reusable UI components
-│   ├── YapperCard.tsx
-│   ├── ReputationChart.tsx
-│   ├── LogoutButton.tsx
-│   └── ...
-│
-├── lib/                       # Utilities and mock data
-│   └── mockData.ts
-│
-├── styles/                    # Global CSS
-│   └── globals.css
-│
-├── public/                    # Static files (avatars, icons)
-│
-├── .env.local                 # Environment variables (e.g., Twitter API keys)
-└── ...
-
-````
-
-## 🛠️ Getting Started
-
-### 1. Clone the repo
-
+### 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/yapper-frontend.git
+git clone https://github.com/Ashish-Kumar-007/yapper-reputation-dashboard.git
 cd yapper-frontend
 ````
 
@@ -76,22 +40,64 @@ Create a `.env.local` file:
 
 ```env
 NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your_secret
-TWITTER_CLIENT_ID=your_twitter_client_id
-TWITTER_CLIENT_SECRET=your_twitter_client_secret
+NEXTAUTH_SECRET=your_secret_key
+NEXT_PUBLIC_API_URL=http://localhost:5000  # Backend API URL
 ```
 
-### 4. Run locally
+> Make sure your backend is running and accessible.
+
+### 4. Run the development server
 
 ```bash
 npm run dev
 ```
 
-Navigate to [http://localhost:3000](http://localhost:3000)
+Frontend will be live at: `http://localhost:3000`
 
-## 🧪 Notes
+---
 
-* Uses mock data (`lib/mockData.js`) for local testing without backend.
-* Auth flow is integrated but can be mocked with fake session data during development.
-* Add backend API later to store user data persistently.
+## 🔐 Authentication
 
+Mock Twitter sign-in is handled via [NextAuth.js](https://next-auth.js.org/). To enable this:
+
+* Configure Twitter credentials on a platform like Vercel
+* Add the provider to `[...nextauth].js`
+
+Temporary mock login is implemented for demo purposes.
+
+---
+
+## 🧪 API Integration
+
+* Leaderboard and Yapper data is fetched from the backend:
+
+```js
+const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/yapper/leaderboard`);
+```
+
+---
+
+## 🖼️ UI Libraries & Tools
+
+* Tailwind CSS for styling
+* Recharts for charts
+* react-progressbar-semicircle for score visualization
+* NextAuth.js for Twitter OAuth (Will be Used but for now used temp Login)
+* Icons via emoji and minimal graphics
+
+---
+
+## 🧪 Demo Mode
+
+For testing or demo purposes, mock data is available:
+
+```js
+import { mockYapperData, mockLeaderboardData } from '@/lib/mockData';
+```
+
+---
+
+## 📬 Contributing
+
+Contributions, ideas, and issues are welcome!
+Please fork the repo and submit a pull request.
