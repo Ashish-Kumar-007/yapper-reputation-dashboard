@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { signOut } from "next-auth/react";
-import { mockYapperData, mockLeaderboardData } from "@/lib/mockData";
+import { mockYapperData, leaderboard } from "@/lib/mockData";
 import {
   LineChart,
   Line,
@@ -22,6 +22,9 @@ import { GiRupee } from "react-icons/gi";
 
 export default function DashboardPage() {
   const [data, setData] = useState(null);
+  const [leaderboard, setLeaderboard] = useState([]);
+  const[yapper, setYapper] = useState(null);
+  const [loading, setLoading] = useState(true);
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -31,15 +34,29 @@ export default function DashboardPage() {
     }
   }, [status, router]);
 
-  useEffect(() => {
-    if (mockYapperData) {
-      setData(mockYapperData);
-    }
-  }, []);
 
+  useEffect(() => {
+    async function fetchLeaderboard() {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/yapper/leaderboard`);
+        const data = await res.json();
+        const yapperData = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/yapper/68190a7ac5015bd9dfcffec6`);
+        const yapper = await yapperData.json();
+        setYapper(yapper);
+        setLeaderboard(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching leaderboard:', error);
+        setLoading(false);
+      }
+    }
+  
+    fetchLeaderboard();
+  }, []);
+  
   if (status === "loading") return <div className="p-4">Loading...</div>;
 
-  if (!data)
+  if (!yapper)
     return <div className="p-6 text-center text-lg">Loading Dashboard...</div>;
 
   return (
@@ -47,7 +64,7 @@ export default function DashboardPage() {
       <nav className="bg-indigo-600 p-4 shadow-md">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="text-white font-semibold text-xl">
-            Welcome, {session?.user?.name}
+            Welcome, {yapper?.name}
           </div>
 
           {status === "authenticated" && (
@@ -73,11 +90,11 @@ export default function DashboardPage() {
                 Reputation Score
               </h2>
               <p className="text-[48px] font-bold text-indigo-600 mt-2">
-                {Math.round(data.reputationScore)}
+                {Math.round(yapper.reputationScore)}
               </p>
             </div>
             <SemiCircleProgressBar
-              percentage={data.reputationScore}
+              percentage={yapper.reputationScore}
               stroke={"#533cfa"}
               diameter={100}
               strokeWidth={15}
@@ -92,15 +109,15 @@ export default function DashboardPage() {
             <div className="space-y-4 text-[16px] text-gray-600">
               <div className="flex justify-between">
                 <span className="font-medium">Total Yaps</span>
-                <span>{data.totalYaps}</span>
+                <span>{yapper.totalYaps}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">Successful Yaps</span>
-                <span>{data.successfulYaps}</span>
+                <span>{yapper.successfulYaps}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium">Rejections</span>
-                <span>{data.totalRejections}</span>
+                <span>{yapper.totalRejections}</span>
               </div>
             </div>
           </div>
@@ -113,7 +130,7 @@ export default function DashboardPage() {
 
             <div className="w-full flex items-center justify-between mb-4">
               <div className="text-[24px] font-semibold text-orange-500 flex items-center gap-2">
-                🔥 {data.activeStreak}
+                🔥 {yapper.activeStreak}
               </div>
               <span className="text-sm text-gray-400">Active Streak</span>
             </div>
@@ -125,7 +142,7 @@ export default function DashboardPage() {
               Badges
             </h2>
             <div className="flex gap-4 flex-wrap">
-              {data.badges.map((badge, i) => (
+              {yapper.badges.map((badge, i) => (
                 <div
                   key={i}
                   className="w-12 h-12  flex items-center justify-center text-2xl text-indigo-600"
@@ -145,7 +162,7 @@ export default function DashboardPage() {
               Reputation Growth
             </h2>
             <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={data.reputationHistory}>
+              <LineChart data={yapper.reputationHistory}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="day" />
                 <YAxis />
@@ -167,7 +184,7 @@ export default function DashboardPage() {
               Leaderboard
             </h2>
             <ul className="space-y-4">
-              {mockLeaderboardData.map((entry, i) => (
+              {leaderboard.map((entry, i) => (
                 <li
                   key={i}
                   className="flex items-center justify-between p-3 bg-gray-50 rounded-lg shadow-sm"
@@ -178,7 +195,7 @@ export default function DashboardPage() {
                     </span>
                   </div>
                   <span className="text-[16px] text-gray-500">
-                    {entry.reputationScore}
+                    {Math.round(entry.reputationScore)}
                   </span>
                 </li>
               ))}
